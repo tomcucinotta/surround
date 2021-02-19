@@ -16,8 +16,8 @@ typedef struct {
 	unsigned channels;
 } capHW;
 
-capHW hw;
-int err;
+extern capHW hw;
+extern int err;
 
 void loadCapSettings(const char name[], const unsigned sr, const unsigned c);
 

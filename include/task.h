@@ -13,15 +13,15 @@
 #include <alsa/asoundlib.h>
 
 // Alsa handlers
-snd_pcm_t *cHandle;			// capture handler
-snd_pcm_t *pbHandle;		// playback handler
+extern snd_pcm_t *cHandle;			// capture handler
+extern snd_pcm_t *pbHandle;		// playback handler
 
 // Variables
-short bufRead[CHANNELS * M];	// buffer for capturing
-short bufWrite[CHANNELS * M];	// buffer for playback
-int readData, writeData;		// number of samples captured
+extern short bufRead[CHANNELS * M];	// buffer for capturing
+extern short bufWrite[CHANNELS * M];	// buffer for playback
+extern int readData, writeData;		// number of samples captured
 
-struct BufferSem inBufferSem, outBufferSem;	// to synch tasks
+extern struct BufferSem inBufferSem, outBufferSem;	// to synch tasks
 
 extern unsigned short exitLoop;
 extern unsigned char toggle;

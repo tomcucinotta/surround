@@ -15,7 +15,9 @@ SRCS := $(wildcard $(SRC_DIR)/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 .PHONY: all
-all: $(OBJS)
+all: $(MAIN)
+
+$(MAIN): $(OBJS)
 	$(CC) -o $(MAIN) $? $(CFLAGS_1) $(LIBS)
 
 
@@ -23,5 +25,5 @@ $(OBJS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLUDES)
 	$(CC) -c -o $@ $< $(LIBS) $(CFLAGS_1)
 
 clean:
-	rm bin/main
-	rm lib/*.o
+	rm -f bin/main
+	rm -f lib/*.o

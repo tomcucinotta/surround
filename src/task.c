@@ -16,11 +16,24 @@
 #include <pthread.h>
 // #include <sys/time.h>
 
+// Alsa handlers
+snd_pcm_t *cHandle;			// capture handler
+snd_pcm_t *pbHandle;		// playback handler
+
+// Variables
+short bufRead[CHANNELS * M];	// buffer for capturing
+short bufWrite[CHANNELS * M];	// buffer for playback
+int readData, writeData;		// number of samples captured
+
+struct BufferSem inBufferSem, outBufferSem;	// to synch tasks
+
 unsigned short exitLoop = 0;
 
+/*
 #ifdef MEASURE_LATENCY
 struct Latency m_latency;
 #endif
+*/
 //struct timeval start, end;	
 
 void initAlsa(const char *dev_name[], const unsigned fq, const unsigned c, const unsigned f) {
@@ -105,9 +118,11 @@ void *captureThread(void *arg) {
 	while (1) {
 		sem_wait(&inBufferSem.priv_w);
 
+		/*
 		#ifdef MEASURE_LATENCY
 		gettimeofday(&m_latency.start, NULL);
 		#endif
+		*/
 
 		readData = capture(cHandle, bufRead, M);
 		inBuffer_post_write(&inBufferSem);
@@ -121,9 +136,11 @@ void *captureThread(void *arg) {
 
 void *playbackThread(void *arg) {
 
+	/*
 	#ifdef MEASURE_LATENCY
 	initLatencyBuffer(&m_latency);
 	#endif
+	*/
 
 	outBuffer_post_read(&outBufferSem);
 
@@ -132,17 +149,21 @@ void *playbackThread(void *arg) {
 		sem_wait(outBufferSem.priv_r);
 		playback(pbHandle, bufWrite, writeData);
 
+		/*
 		#ifdef MEASURE_LATENCY
 		gettimeofday(&m_latency.end, NULL);
 		#endif
+		*/
 
 		outBuffer_post_read(&outBufferSem);
 
+		/*
 		#ifdef MEASURE_LATENCY
 		computeLatency(&m_latency);
 		logLatency(&m_latency, (float)m_latency.micros/writeData);
 		#endif
-		
+		*/
+
 		if (exitLoop) break;
 	}
 	pthread_exit(NULL);

@@ -8,6 +8,9 @@
 
 #include "capture.h"
 
+capHW hw;
+int err;
+
 void loadCapSettings(const char name[], const unsigned sr, const unsigned c){
 	strcpy(hw.name, name);
 	hw.samplerate = sr;

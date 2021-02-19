@@ -8,6 +8,8 @@
 #include <sys/time.h>
 #include "playback.h"
 
+PlaybackHW hwpb;
+
 void loadPBSettings(const char name[], const unsigned sr, const unsigned c, const unsigned f) {
 	strcpy(hwpb.name, name);
 	hwpb.samplerate = sr;
@@ -18,6 +20,7 @@ void loadPBSettings(const char name[], const unsigned sr, const unsigned c, cons
 snd_pcm_t * playbackSetup() {
 	snd_pcm_hw_params_t *hw_params;
 	static snd_pcm_t *pb_handle;
+        int err;
 
 	if ((err = snd_pcm_open(&pb_handle, hwpb.name, SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
 		fprintf(stderr, "[ERROR:] cannot open audio device %s (%s)\n", hwpb.name, snd_strerror(err));

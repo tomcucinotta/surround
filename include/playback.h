@@ -17,8 +17,7 @@ typedef struct {
 	long unsigned frames;
 } PlaybackHW;
 
-PlaybackHW hwpb;
-int err;
+extern PlaybackHW hwpb;
 
 void loadPBSettings(const char name[], const unsigned sr, const unsigned c, const unsigned f);
 snd_pcm_t * playbackSetup();
